@@ -1,0 +1,8 @@
+{
+  "statusCode": 200,
+  "body": {
+    "data": {
+      "key1": "1"
+    }
+  }
+}

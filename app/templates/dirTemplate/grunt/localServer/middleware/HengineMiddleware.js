@@ -4,6 +4,7 @@
 var path = require('path'),
     fs = require('fs'),
     url = require('url'),
+    util = require('./helper/util'),
     hengineClient = require('../lib/hengineClient');
 
 // todo
@@ -17,7 +18,7 @@ module.exports = exports = {
             var filePath = url.parse(req.url).pathname,
                 dataPath = path.normalize(conf.root + filePath).replace(/\.html/, '.json');
 
-            fs.readFile(dataPath, function(err, data){
+            fs.readFile(dataPath, {'encoding': 'utf-8'}, function(err, data){
                 if(err){
                     res.writeHead(404);
                     res.end(dataPath + ' not found, ' + err.message);
@@ -25,6 +26,9 @@ module.exports = exports = {
                     next(err);
                     return;
                 }
+
+                // remove the comment of json files
+                data = util.removeJsonComment(data);
 
                 hengineClient(
                     {
